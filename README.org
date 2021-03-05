@@ -7,10 +7,12 @@
 \_____\_| \_\____/ \___/|_|_| |_| |_|\__,_| .__/ 
                                           | |    
                                           |_|  
-
 #+end_src
-
 Long range, stereo-image, image map wrangler.
+
+Disclaimer: 
+    CURRENTLY UNDER ACTIVE DEVELOPMENT
+    If you would like to use this for your research, please contact me!
 
 * Overview
 1. Vet images for things you like, against those things you dislike. 2. Generate image maps based on image statistics.
