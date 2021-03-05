@@ -1,0 +1,437 @@
+* TOOO
+** JB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+JB
+    SAMPLES
+       eyeing differences
+       pre-post vet stats
+            conditional histograms
+            contrast is distributed w/ certain parameters
+            looking for stability
+       stats of how 
+       at different disparities
+
+    DONE Sample from CPS -> 0 disparity
+    DONE same patch sizes as other experiment
+
+    5ish bins in the end
+        bins - how big separation between
+        tradeoff between diversity and bin narrowness
+        .
+        separation
+        width
+        range
+        bin grouping -> sel?
+    downsampling
+        128, dnk=4, 32x32
+        
+|         | data | stats |
+|---------+------+-------|
+| dnk     |      |       |
+| basic   |      |       |
+| limited |      |       |
+
+meeting
+    wed between 12-3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+** Priority
+prj not in DB (orphaned)
+dates in _aliases_.txt
+
+moving directories bug
+    
+recompute genstat
+
+stats modules
+    plotting
+
+gen - ignore pixel jumps
+       
+load CPlookup
+new XYZ fill-in 
+new phtGamma
+
+moduleChecklist
+AllInfos
+
+pht/xyz
+    dsp, pch prog % pht, xyz
+plot smp by bin
+
+*** completion 
+redo images only (if possible)
+_status_.txt 
+check for meta info 
+check for images
+compute meta info if doesn't exist
+rm incomplete
+print completion
+*** Module checklist
+png outputs
+    vet
+    gen
+    bin
+    smp
+
+counts
+    sel
+    
+progressinfo
+    dsp
+    sel
+
+    
+progressplot
+    vet
+    pch
+    dsp
+    sel
+checkcontinue
+    pch
+    dsp
+    sel
+
+** Later
+vars
+    dmp_dsp & dmp_pch -> dsp_dmp & pch_dmp
+    switch _f's with _p's (public private)
+    switch bi with inds
+    types -> mods
+    type  -> mod
+    
+gen_wdw_p
+    wdw class?
+
+
+PszRCbuff
+    min-max disparity -> patch span
+        (regardless of original)
+        projection plane
+        IPDm
+    depth -> vrg map bi -> max angle -> max shift -> patch span
+
+    
+saving patch/patches when modified
+    ptch - save a patch
+    ptchs -save patches
+
+gitinfo 
+    code -> commit hash
+    def  -> commithash
+
+** VERSIONS
+*** v0.1
+Generate patches for disp contrast experiment
+| dsp     | CODED  |
+| dsp_dmp | CODED  |
+| sel     | CODED  |
+
+*** v0.2
+Generate patches for motion in depth experiment
+| versioning   |               |
+| time vector  | concept drawn |
+| movie output |               |
+*** v0.3
+Make useable by other people
+| cleanup abstractioning         |   |
+| Testing Suite                  |   |
+| Documentaiton cleanup          |   |
+| Display constructor            |   |
+| import existing images/patches |   |
+| integrate w/ mariadb |   |
+*** Later?
+| archiving            |   |
+* Module checklist
+png outputs
+    vet
+    gen
+    bin
+    smp
+
+bSaveProg
+    defaults
+    x   vet 0
+    x   gen 0
+    x   bin 1
+    x   smp 1
+    x   pch 0
+    x   dsp 0
+    x   sel 0
+bProg
+    defaults
+    x   vet 1
+    x   gen 1
+    x   bin 1
+    x   smp 1
+    x   pch 0
+    x   dsp 0
+    x   sel 0
+
+histograms
+  x bin
+  x smp
+edges
+  x bin
+  x smp
+counts
+  x bin
+  x smp
+    sel
+def
+  x vet
+  x gen
+  x bin
+  x smp
+  x pch
+  x dsp
+  ? sel
+progressinfo
+  x vet
+  x gen
+  x bin
+  x smp
+  x pch
+    dsp
+    sel
+progressplot
+    vet
+  x gen
+  x bin
+  x smp
+    pch
+    dsp
+    sel
+checkcontinue
+  x vet
+  x gen
+  x bin
+  x smp
+    pch
+    dsp
+    sel
+
+
+|     | progress |
+|     |          |
+| vet | bap      |
+| gen | gen      |
+| bin | bibin    |
+| smp | bibin    |
+| sel |          |
+* INFOS
+bin
+    counts
+    edges
+smp
+    counts
+    edges
+    all
+pch
+    src
+    name?
+    ind?
+    db?
+    genOpts
+dsp
+    ind
+    table
+sel
+    blk
+    lvl
+    sel
+genOpts
+* stm tables
+ptch
+       P
+
+       I
+       k
+       B
+       S
+
+       smpRC
+dsp
+    D
+
+    P
+    I
+    k
+    B
+    S
+    smpRC
+
+    display
+    LExyz
+    RExyz
+    WinXYZm
+    WinPszRCm
+    trgtDsp
+    trgtXYZm
+
+sel
+    fname
+    D
+    trl
+    cmpNum
+    intrvl
+    lvl
+
+* genotps struct
+genOpts
+    type
+        name
+        maps
+        dbParams
+        objParams
+        setParams
+    nL
+    typeL
+        cell{}
+            name
+            minMax
+            maps
+            dbParams
+            objParams
+            setParams
+
+def
+* ptchTable
+* lvlstruct
+% lvlStruct
+%   .dsp
+%        val = [-3; -7; -5];
+%        Xunits=['arcmin']
+%   .spd
+%   .winXYZm
+%
+%   .winPszRCm
+%   .trgtXYZm
+%   .focXYZm
+%   .wdw...
+
+* repeats
+AMOUNT
+    full  - sample once for all
+    rnd   - sample w/ replacement
+    none  - sample w/out replacement
+
+BETWEEN
+    modes
+    stds
+    trl
+    intrvls
+
+full modes -> double pass
+rnd  modes -> pseudo double
+none modes -> full testing
+
+full stds  -> same stimuli in each standard
+rnd  stds  ->
+* filestructure
+SMP
+    _counts_
+    _edges_
+    _fig_
+        histograms
+
+PCH
+ptch/(db)/pch/(hash)/
+    _ind_ [ lookup ptch by src info ] 
+    (short).mat 
+
+
+DSP
+ptch/(db)/dsp/(indHash)/
+    _table_
+    _def_
+    (short).mat 
+ptch/(db)/sp/_(genHash)/
+    _table_
+    _def_
+    _ind_ [ all indHash generate ]
+
+
+SEL
+    DMP
+        ptch/(db)/dmp/(name)/
+        _def_
+        _lvl_
+        _blk_
+        _sel_
+        _counts_
+        P
+    TRN/TST
+        exp/(db)/(name)/
+        _def_
+        _lvl_
+        _blk_
+        _sel_
+        _counts_
+        P
+    MOD
+        ???
+
+* object structuring
+imapVet(database,                        Opts,plotOpts,bDontRun)
+imapGen(database,                        Opts,plotOpts,bDontRun)
+imapBin(database,imgType,imgName,vetName,Opts,plotOpts,bDontRun)
+imapSmp(database,imgType,imgName,        Opts,plotOpts,bDontRun)
+imapPch(database,imgType,imgName,binName,Opts,plotOpts,bDontRun)
+imapDsp(hashes,                          Opts,plotOpts,bRun)
+imapSel(hashes,                          Opts,plotOpts,bRun)
+
+INIT
+    get_img_db_info()
+    parseLandR
+    CONSTRUCTOR
+        obj=parse_Opts()
+        get_hash()
+        obj.parse_plotOpts_p()
+        obj.save_def_info()
+    parse_Opts
+    get_parse % XXX, vetind, sel
+
+MAIN
+    run
+
+PLOT
+    plot_prog
+    plot_f
+
+UTIL
+    HASH
+        get_hash
+        get_struct
+        save_def
+    FROM T
+    FROM
+        get_*_(SAVE)
+
+    SAVE
+        save
+        load
+        get_fname
+        get_dire
+        get_name
+
+* HyperPatch
+- transform scene BEFORE
+- dVecXYZ & startXYZ to pofXYZt
+- trace through pp at each frame
+- move image in opposite direction?
+
+PctrXY for both LandR at pofXYZ
+    maxXYZ given patch size -> from camera geometry
+
+
+CPs always at center mean moving the PP accross surfaces
+
+
+shifting windows
+higher res patches instead of interp
+
+animation
+binary frames LandR
+
+nRepFrames
+newFramesPerSec

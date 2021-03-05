@@ -1,0 +1,248 @@
+#+begin_src
+ _    ______ _____ _____ _
+| |   | ___ /  ___|_   _(_)                      
+| |   | |_/ \ `--.  | |  _ _ __ ___   __ _ _ __  
+| |   |    / `--. \ | | | | '_ ` _ \ / _` | '_ \ 
+| |___| |\ \/\__/ /_| |_| | | | | | | (_| | |_) |
+\_____\_| \_\____/ \___/|_|_| |_| |_|\__,_| .__/ 
+                                          | |    
+                                          |_|  
+
+#+end_src
+
+Long range, stereo-image, image map wrangler.
+
+* Overview
+1. Vet images for things you like, against those things you dislike. 2. Generate image maps based on image statistics.
+3. Place maps into bins
+4. Sample as many patches as possible
+5. Create image patches
+6. Manipulate patches accoreding to how they will be displayed
+7. Select patches for experimentation
+
+Maps - luminance, range, dvn, other
+
+* Why?
+HalfOcc
+    procedural code very hard to extend
+    difficult for others to use
+DPA
+    very hard to manage patches
+Disparity contrast project
+    - vetting
+    - sampling
+    - binning
+    - validating
+Motion in depth project
+    will be even harder than DPA
+
+** Specifics
+Databases
+    filenames
+    other image sets
+    searching
+    garbage collecting/cleanup
+    Paramters to data parity
+
+Running
+    late crashing
+    continuation
+    param parsing
+    output validation
+
+Sampling
+    limited
+    conditional
+    binocular sampling
+    binocular vetting
+
+Reproducabliity
+    versioning
+    clean, consistent, api
+
+Flexibility
+    some parameters are not easily changed
+        need to resample
+
+* Previous Code iterations
+LRSI2DSP/LRSI2SPD
+    basic structure
+conditional X
+    real first version of this
+halfOcc
+    some of the sampling and vetting procedures,
+    several things from conditional X
+* Solutions
+Sane OOP
+    simplicity
+        funciton names
+        function inputs
+        scope
+        returning to work on it later...
+    abstraction
+
+Databases
+    filenames by hashes
+    hashes by parameters
+    hashes tied to specific version of code
+        % if more parameters come later
+    hash database
+        hash -> parameters used
+    robust map loading tool
+    parameters copied and saved in plain text
+    statistics (in plain text) and plots saved
+    easy to query by eye or by parameters
+
+Running
+    minimal setup required
+    methods to asses and validate progress at any stage
+    plotting and progress at every stage along the way (if desired)
+
+Sampling
+    set of algorithms I'm proud of
+* Running
+Read documentation on parameters
+write file containing desired parameters
+filename is only parameter to function.  Run.
+If parameters are wrong, simply change, will continue where you left off, doing any garbage collecting necessary
+* Modules
+Each module follows has the same set of core features
+1. Intelligent param parsing
+2. hash generation/validation
+3. save easily readible information alongside images
+4. consistent saving/loading conventions
+5. progress plots
+6. Easy to stop and continue
+
+** 1. vet
+At
+    by pixel
+Edge
+    by vertical/horizontal 'runs'
+In
+    by region
+        potential patch region
+        image feature regions
+
+Vet at/in anchor only
+Vet at/in CP only
+Vet at/in CP and anchor
+
+optimized for speed
+
+** 2. gen
+generate new maps based upon some statistic
+    eg 2nd order disparity
+as constrained by some other statistic
+    eg. 3rd order disparity
+easily exenstible by submodules
+** 3. bin
+combines gen w/out vet
+sorting values into bins
+*manual or auto determination of nbins and which bins*
+** 4. smp
+sample as many points as possible
+moncularly/binocularly
+with as little or as much overlap between points as desired (binocularly or not!)
+while prioritizing bins with lower counts
+    in entire set
+    in image
+    in LorR
+    by current progress
+handle pre-samples
+** 5. pch
+    make patches (see ptch below)
+** 6. dsp
+    add display params
+        where is the window?
+        how big is the window?
+        where is the target?
+        whats the desired disparity of the target?
+        where is subject focusing?
+** 7. sel
+index patches for expermientation, grouping them into "ptchs" (see below)
+generate 'E' object (expTracker)
+robust to many types of experiments
+** wrapper
+reads definitions file and sorts parameters according to module
+parses parameters of nearly everything before running
+    know from the start whether or not will crash
+initiates all modules
+    hashes computed
+    directories checked/created
+communicates between modules
+handles versionining
+* datatypes
+** maps
+outputs of each modules 1-7 smp are all saved as png images
+    not anything new
+    as simple as possible
+** ptch
+*** Features
+all parameters can be changed
+    will update everything automatically as needed
+can output images or movies if desired -> important for AMA
+quick plotting
+    imagesc
+    3D
+    above
+easy to integrate with experimets
+integrates textures, maps, masks appropriately
+easily compute image statistics
+validate gen & bin consistency
+ABSTRACTED
+*** properties
+**** display agnostic
+CPsbuff
+mapsbuff
+
+    pht
+    imaps etc..
+msks
+    binary imaps which used to apply some tex to maps
+texs
+    generated images, noise, colors
+
+srcInfo
+    details about where this patch came from
+wdw
+    faded image border (eg. cosine)
+**** display dependent
+maps
+    xyz
+win
+    patch window as seen in the display
+    location
+    size
+trgtInfo
+    desired disparity
+focInfo
+subjInfo
+    LExyz, RExyz, IPDm
+
+change display parameters, everything updates appropriately
+**** buff vs non-buff
+hidden is a set of the larger maps called buffers
+non-buff maps are cropped from buffers to change
+    the target itself
+    target vergence
+This allows for dynamic movie patches
+** ptchs
+simply an index and loader
+load patches as needed
+    designed for memory intensive experiments
+interface w/ psychtoolbox
+
+* fnames
+rootDBdir           imgType  imgName    fname
+
+.daveDB/img/LRSI    img      pht        L002.mat
+.daveDB/img/LRSI    vet      {hash}     L002.mat
+.daveDB/img/LRSI    imap     {hash}     L002.mat
+.daveDB/img/LRSI    bin      {hash}     L002.mat
+.daveDB/img/LRSI    smp      {hash}     L002.mat, all.mat
+
+.daveDB/in/LRSI     pch      {hash}     (P).mat
+.daveDB/in/LRSI     dsp      {hash}     (D).mat
+
+/daveDB/in/LRSI     sel      {prj}      (prjName).mat
