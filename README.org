@@ -11,7 +11,9 @@
 Long range, stereo-image, image map wrangler.
 
 Disclaimer: 
+
     CURRENTLY UNDER ACTIVE DEVELOPMENT
+
     If you would like to use this for your research, please contact me!
 
 * Overview
