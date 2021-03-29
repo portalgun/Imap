@@ -1,5 +1,69 @@
 classdef imapCommon_alias < handle
 methods(Static=true)
+    function out=isalias(alias)
+        [aliases,hashes,databases,types]=imapCommon.load_alias_DB_parts();
+        out=any(ismember(alias,aliases));
+    end
+    function out=ishash(hash)
+        [aliases,hashes,databases,types]=imapCommon.load_alias_DB_parts();
+        out=any(ismember(hash,hashes));
+    end
+    function out=is_hash_str(hash)
+        out=regExp(hash,'^[0-9a-z]{32}$');
+    end
+    function hash=auto_hash(hashORalias)
+        if imapCommon.is_hash_str(hashORalias)
+            hash=hashORalias;
+        elseif imapCommon.isalias(hashORalias)
+            hash=imapCommon.alias2hash(hashORalias);
+        end
+    end
+    function hashes=auto_hashes(hashesORalias)
+        if isstruct(hashesORalias)
+            hashes=hashesORalias;
+        elseif imapCommon.isalias(hashesORalias)
+            hashes=imapCommon.alias2hashes(hashesORalias);
+        end
+    end
+    function Hashes=alias2hashes(alias,database)
+        if ~imapCommon.exist_alias_fname_DB()
+            hash='';
+            database='';
+            mod='';
+            return
+        end
+        alias=sed('s',alias,'\.m$','');
+
+        [aliases,hashes,databases,types]=imapCommon.load_alias_DB_parts();
+        ind=ismember(aliases,alias);
+        if exist('database','var') && ~isempty(database)
+            ind=ind & ismember(databases,database);
+        end
+        hashes=hashes(ind);
+        types=types(ind);
+        databases=databases(ind);
+
+
+        Hashes=struct();
+        if isuniform(databases)
+            Hashes.database=databases{1};
+        elseif ~exist('database','var') || isempty(database)
+            error('Ambiguous request, database name required')
+        end
+        mods=imapCommon.modules;
+        for i = 1:length(mods)
+            mod=mods{i};
+            if startsWith(mod,'dmp_')
+                continue
+            end
+            if ismember(mod,types)
+                Hashes.(mod)=hashes{ismember(types,mod)};
+            else
+                Hashes.(mod)='';
+            end
+
+        end
+    end
     function [hashes,databases,types]=alias2hash(alias,mod)
         if ~imapCommon.exist_alias_fname_DB()
             hash='';
