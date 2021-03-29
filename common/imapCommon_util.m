@@ -25,6 +25,40 @@ methods
     end
 end
 methods(Static=true)
+    function out=smp_bins_to_bin_vals(hsORa,bins)
+        hashes=imapCommon.auto_hashes(hsORa);
+        edgesBin=imapBin.load_edges_f(hashes.database, hashes.bin);
+        edgesSmp=imapSmp.load_edges_f(hashes.database, hashes.smp);
+        if exist('bins','var') && ~isempty(bins)
+            edgesSmp=edgesSmp(bins);
+        end
+
+
+        A=find(ismember(edgesBin,edgesSmp));
+        B=A+1;
+        ind1=transpose(edgesBin(A));
+        ind2=transpose(edgesBin(B));
+
+        out=[ind1 ind2];
+    end
+    function out=smp_bins_to_bin_bins(hsORa,bins)
+        hashes=imapCommon.auto_hashes(hsORa);
+        edgesBin=imapBin.load_edges_f(hashes.database, hashes.bin);
+        edgesSmp=imapSmp.load_edges_f(hashes.database, hashes.smp);
+        if exist('bins','var') && ~isempty(bins)
+            edgesSmp=edgesSmp(bins);
+        end
+        out=find(ismember(edgesBin,edgesSmp));
+    end
+    function out=bin_bins_to_smp_bins(hsORa,bins)
+        hashes=imapCommon.auto_hashes(hsORa);
+        edgesBin=imapBin.load_edges_f(hashes.database, hashes.bin);
+        edgesSmp=imapSmp.load_edges_f(hashes.database, hashes.smp);
+        if exist('bins','var') && ~isempty(bins)
+            edgesBin=edgesBin(bins);
+        end
+        out=find(ismember(edgesSmp,edgesBin));
+    end
     function p=get_patch(database,type,hash,I,k,PctrRC,PszRC)
         hashes=struct(type,hash);
         srcInf=srcInfo(database,hashes,I,k,PctrRC);
