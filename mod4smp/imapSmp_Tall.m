@@ -21,7 +21,17 @@ methods
     end
 end
 methods(Static=true)
-    function smpRC=get_smp_all(database,hash)
+    function smpRC=get_smp_all(dbORalias,hash)
+
+        if imapCommon.isalias(dbORalias)
+            alias=dbORalias;
+            hashes=imapCommon.alias2hashes(alias);
+            database=hashes.database;
+            hash=hashes.smp;
+        else
+            database=dbORalias;
+        end
+
         %imap_Pch_main
         dire=imapCommon.get_directory_f(database,'smp',hash);
         fname=[dire '_all_.mat'];

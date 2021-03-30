@@ -2,7 +2,7 @@ classdef imapSmp_util < handle
 methods
 %% FROM
     function obj=get_smp_all_p(obj)
-        obj.smpRCAll=imapSmp.get_smp_all(obj.database,obj.hashes.smp)
+        obj.smpRCAll=imapSmp.get_smp_all(obj.database,obj.hashes.smp);
     end
     function obj=get_range_data(obj)
         bFlag=0;

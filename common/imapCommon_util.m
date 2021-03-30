@@ -25,6 +25,14 @@ methods
     end
 end
 methods(Static=true)
+    function edgesSmp=get_edges_smp(hsORa)
+        hashes=imapCommon.auto_hashes(hsORa);
+        edgesSmp=imapSmp.load_edges_f(hashes.database, hashes.smp);
+    end
+    function edgesBin=get_edges_bin(hsORa)
+        hashes=imapCommon.auto_hashes(hsORa);
+        edgesBin=imapBin.load_edges_f(hashes.database, hashes.bin);
+    end
     function out=smp_bins_to_bin_vals(hsORa,bins)
         hashes=imapCommon.auto_hashes(hsORa);
         edgesBin=imapBin.load_edges_f(hashes.database, hashes.bin);

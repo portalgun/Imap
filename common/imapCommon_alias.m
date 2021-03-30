@@ -154,7 +154,7 @@ methods(Static=true)
         %[~,ind]=unique(cell2mat(all(:,1:2)),'rows');
         %all=all(ind,:);
         for i = 1:size(all,1)
-            imapCommon.update_aliases_FILE(all{i,1},all{i,2},all{i,3})
+            imapCommon.update_aliases_FILE(all{i,1},all{i,2},all{i,3});
         end
     end
     function update_aliases_FILE(database,mod,hash)

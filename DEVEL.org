@@ -39,6 +39,9 @@ prj not in DB (orphaned)
 dates in _aliases_.txt
 
 moving directories bug
+rm aliases bug
+    imapAll.mod_init
+        imapCommon_alias.rm_alias_db
     
 recompute genstat
 
